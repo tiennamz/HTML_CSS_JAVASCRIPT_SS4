@@ -73,50 +73,46 @@ choice=+prompt(menu);
             break;
     
         case 2:
-              let rows = Number(prompt("Nhập số hàng của kho:"));
-  let cols = Number(prompt("Nhập số cột của kho:"));
+            let row = Number(prompt("Nhập số hàng: "));
+            let column = Number(prompt("Nhập số cột: "));
+            alert("Đã in bản đồ kho ra Console(F12).");
 
-  if (isNaN(rows) || isNaN(cols) || rows <= 0 || cols <= 0) {
-    alert("Số hàng và cột phải là số dương!");
-    return;
-  }
-
-  console.log(`--- Bản đồ kho sách (${rows}x${cols}) ---`);
-  for (let i = 1; i <= rows; i++) {
-    let rowLayout = "";
-    for (let j = 1; j <= cols; j++) {
-      let position = `[${i}-${j}]`;
-      if (i === j) {
-        position += "(Kệ ưu tiên)";
-      }
-      rowLayout += position + "  ";
+            for (let i = 1 ; i <= row ; i++ ) {
+            let string = "";
+            for (let j = 1 ; j <= column ; j++ ) {
+                if (i === j ) {
+                string += `[${i}-${j}] (Kệ ưu tiên)`;
+                } else {
+                string += `[${i}-${j}]`;
+                }
+            }
+        console.log(string);
     }
-    console.log(rowLayout); 
-  }
-  alert("Đã in bản đồ kho ra Console (F12).");
             break;
     
         case 3:
               let quantity = Number(prompt("Nhập số lượng sách hiện có:"));
-  let currentCostPerBook = Number(prompt("Nhập phí bảo trì cho 1 cuốn (VNĐ):"));
-  let years = Number(prompt("Nhập số năm dự toán:"));
 
-  if (isNaN(quantity) || isNaN(currentCostPerBook) || isNaN(years)) {
-    alert("Dữ liệu nhập vào phải là số!");
-    return;
+          let currentcostperbook = Number(prompt("Nhập phí bảo trì cho 1 cuốn (VNĐ):"));
+
+          let years = Number(prompt("Nhập số năm dự toán:"));
+
+       if (isNaN(quantity) || isNaN(currentcostperbook) || isNaN(years)) {
+       alert("Dữ liệu nhập vào phải là số!");
+       break;
   }
+     console.log("Dự toán phí bảo trì sách theo năm..... ");
 
-  console.log("--- Dự toán phí bảo trì sách theo năm ---");
-  let totalCost;
-  for (let year = 1; year <= years; year++) {
-    totalCost = quantity * currentCostPerBook;
-    console.log(
-      `Năm ${year}: ${totalCost.toLocaleString()} VNĐ (Đơn giá: ${currentCostPerBook.toFixed(0)}/cuốn)`,
-    );
+      for (let year = 1; year <= years; year++) {
 
-    currentCostPerBook = currentCostPerBook * 1.1;
-  }
-  alert("Đã hoàn thành bảng dự toán tại Console.");
+          totalCost = quantity * currentcostperbook;
+
+             console.log(`Năm ${year}: ${totalCost} VNĐ (Đơn giá: ${currentcostperbook}/cuốn)`,
+             );
+
+                currentcostperbook = currentcostperbook * 1.1;
+        }
+            alert("Đã hoàn thành bảng dự toán tại Console.");
             break;
     
         case 4:
