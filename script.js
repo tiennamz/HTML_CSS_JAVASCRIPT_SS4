@@ -1,157 +1,134 @@
-// Dang nhap
-
 let userName;
 let password;
-let falsePasswordCount=0;
+let passwordCount=0;
+
 do {
-    userName=prompt("Mời bạn nhập tài khoản:");
-    password=prompt("Mời bạn nhập mật khẩu:");
+    userName=prompt("Mời bạn nhập tài khoản:").trim();
+    password=prompt("Mời bạn nhập mật khẩu:").trim();
     if(userName==="admin" && password==="12345"){
         alert("Đăng nhập thành công!");
         break;
     }else{
-        falsePasswordCount++;    
         if(userName!=="admin" && password!=="12345"){
-            alert(`Sai cả tài khoản và mật khẩu! Bạn còn ${3-falsePasswordCount} lần thử.`);
-        }else if(password!=="12345"){
-            alert(`Sai mật khẩu! Bạn còn ${3-falsePasswordCount} lần thử.`);
+            passwordCount++;
+            alert(`Sai cả tài khoản và mật khẩu! Bạn còn ${3-passwordCount} lần thử.`);
         }else if(userName!=="admin"){
-            alert(`Sai tài khoản! Bạn còn ${3-falsePasswordCount} lần thử.`);
+            passwordCount++;
+            alert(`Sai tài khoản! Bạn còn ${3-passwordCount} lần thử.`);
+        }else if( password!=="12345"){
+            passwordCount++;
+            alert(`Sai mật khẩu! Bạn còn ${3-passwordCount} lần thử.`);
+        }
     }
-    if(falsePasswordCount===3){
+    if(passwordCount===3){
         alert("Tài khoản đã bị khóa do nhập sai quá 3 lần!");
     }
-    }
-} while (falsePasswordCount<3 );
+} while (passwordCount<3);
 
-// menu
 let choice;
 do {
-let menu=`
+    let menu=`
 --- HỆ THỐNG QUẢN TRỊ THƯ VIỆN ---
-1. Phân loại mã số sách (Chẵn/Lẻ)
+1. Phân loại mã số sách (Số nguyên chẵn/lẻ).
 2. Thiết kế sơ đồ kho sách (Dạng lưới)
 3. Dự toán phí bảo trì sách theo năm
 4. Tìm mã số sách may mắn
 5. Thoát
-Vui lòng nhập lựa chọn của bạn (1-5):
-`
-choice=+prompt(menu);
-// Xử lý menu
+Vui lòng nhập lựa chọn của bạn (1-5):`
+
+    choice=+prompt(menu);
     switch (choice) {
         case 1:
             let bookCode;
-            bookCodeCount=0;
-            bookCodeOddCount=0;
-            bookCodeEvenCount=0;
+            let bookCodeCount=0;
+            let evenCount=0;
+            let oddCount=0;
+            alert("Nhập các mã số sách (Nhập 0 để dừng lại):")
             do {
-                bookCode=+prompt("Nhập các mã số sách (Nhập 0 để dừng lại):");
-                if(bookCode===0){   
-                    break;
-                }else{
+                bookCode=+prompt("Nhập mã số sách:")
                 bookCodeCount++;
+                if(!Number.isInteger(bookCode)){
+                    alert("Vui lòng nhập số nguyên hợp lệ!")
+                }
+                if(bookCode===0){
+                    alert("Đã phân loại xong! Xem kết quả tại Console (F12).");
+                }
                 if(bookCode%2===0){
-                    bookCodeEvenCount++;
+                    if(bookCode===0){
+                        continue;
+                    }
+                    evenCount++;
                 }else{
-                    bookCodeOddCount++;
+                    oddCount++;
                 }
-            if(isNaN(bookCode)){
-                alert("Vui lòng nhập số nguyên hợp lệ!");               
-            }else if(bookCode===null){   
-                alert("Lựa chọn không hợp lệ, vui lòng thử lại!");
-            }
-            }
-            } while (bookCode!==0 );
-            console.log(`
+            } while (bookCode!==0 || !Number.isInteger(bookCode));
+  console.log(`
 --- Kết quả phân loại mã sách ---
-- Tổng số lượng mã sách đã nhập: ${bookCodeCount}
-- Số mã chẵn (Sách khoa học): ${bookCodeEvenCount}
-- Số mã lẻ (Sách nghệ thuật): ${bookCodeOddCount}
-            
-                `);
-                alert("Đã phân loại xong! Xem kết quả tại Console (F12).")
+- Tổng số lượng mã sách đã nhập: ${bookCodeCount-1}
+- Số mã chẵn (Sách khoa học): ${evenCount}
+- Số mã lẻ (Sách nghệ thuật): ${oddCount}
+`);
+  
             break;
-    
         case 2:
-            let row = Number(prompt("Nhập số hàng: "));
-            let column = Number(prompt("Nhập số cột: "));
-            alert("Đã in bản đồ kho ra Console(F12).");
-
-            for (let i = 1 ; i <= row ; i++ ) {
-            let string = "";
-            for (let j = 1 ; j <= column ; j++ ) {
-                if (i === j ) {
-                string += `[${i}-${j}] (Kệ ưu tiên)`;
-                } else {
-                string += `[${i}-${j}]`;
+            let rowBook=+prompt("Nhập số hàng của kho:");
+            let colBook=+prompt("Nhập số cột của kho:") ;
+            if(isNaN(colBook) || isNaN(colBook) || colBook<=0 || rowBook<=0){
+                alert("Số hàng và cột phải là số dương!")
+            }else{
+            console.log(`--- Bản đồ kho sách (${rowBook}x${colBook}) ---`);
+            for(let i=1;i<=rowBook;i++){
+                let result=""
+                for(let j=1;j<=colBook;j++){
+                    let array=`[${i}-${j}]`
+                    if(i===j){
+                        array+= "(Kệ ưu tiên)"
+                    }
+                    result += array + "   "
+                    
+                }
+                console.log(result);
+            }
+        }
+            break;
+        case 3:
+            let numberBook=+prompt("Nhập số lượng sách hiện có:");
+            let priceBook=+prompt("Nhập phí bảo trì cho 1 cuốn (VNĐ):");
+            let yearBook=+prompt("Nhập số năm dự toán:");
+            console.log("--- Dự toán phí bảo trì sách theo năm ---");
+            console.log(`
+Năm 1: ${priceBook*numberBook} VNĐ (Đơn giá: ${priceBook}/cuốn)`);
+            
+            for(let i=2;i<=yearBook;i++){
+                priceBook=priceBook+priceBook*0.1;
+                console.log(`
+Năm ${i}: ${priceBook*numberBook} VNĐ (Đơn giá: ${priceBook}/cuốn)`);
+                
+            }
+            break;
+        case 4:
+            let luckyNumber=+prompt("Bạn muốn kiểm tra các mã sách từ 1 đến bao nhiêu? (Nhập N):");
+            let luckyArray="";
+            let luckyCount=0;
+            for(let i=1;i<=luckyNumber;i++){
+                if(i%3===0 && i%5!==0){
+                    luckyCount++;
+                    luckyArray+=i + " "
                 }
             }
-        console.log(string);
-    }
+            console.log("--- Danh sách mã sách may mắn (Bội số của 3, không chia hết cho 5) ---");
+            console.log(luckyArray);
+            console.log(`=> Tổng cộng có ${luckyCount} mã may mắn.`);
+            alert(`
+Tìm thấy ${luckyCount} mã may mắn. Xem chi tiết tại Console.`)
             break;
-    
-        case 3:
-              let quantity = Number(prompt("Nhập số lượng sách hiện có:"));
-
-          let currentcostperbook = Number(prompt("Nhập phí bảo trì cho 1 cuốn (VNĐ):"));
-
-          let years = Number(prompt("Nhập số năm dự toán:"));
-
-       if (isNaN(quantity) || isNaN(currentcostperbook) || isNaN(years)) {
-       alert("Dữ liệu nhập vào phải là số!");
-       break;
-  }
-     console.log("Dự toán phí bảo trì sách theo năm..... ");
-
-      for (let year = 1; year <= years; year++) {
-
-          totalCost = quantity * currentcostperbook;
-
-             console.log(`Năm ${year}: ${totalCost} VNĐ (Đơn giá: ${currentcostperbook}/cuốn)`,
-             );
-
-                currentcostperbook = currentcostperbook * 1.1;
-        }
-            alert("Đã hoàn thành bảng dự toán tại Console.");
-            break;
-    
-        case 4:
-            let n = Number(
-    prompt("Bạn muốn kiểm tra các mã sách từ 1 đến bao nhiêu? (Nhập N):"),
-  );
-
-  if (isNaN(n) || n <= 0) {
-    alert("Vui lòng nhập số N dương!");
-    return;
-  }
-
-  let luckyCount = 0;
-  let luckyList = "";
-
-  console.log(
-    `--- Danh sách mã sách may mắn (Bội số của 3, không chia hết cho 5) ---`,
-  );
-  for (let i = 1; i <= n; i++) {
-    if (i % 3 === 0 && i % 5 !== 0) {
-      luckyList += i + " ";
-      luckyCount++;
-    }
-  }
-
-  console.log(luckyList || "Không có mã nào thỏa mãn.");
-  console.log(`=> Tổng cộng có ${luckyCount} mã may mắn.`);
-  alert(`Tìm thấy ${luckyCount} mã may mắn. Xem chi tiết tại Console.`);
-            break;
-    
         case 5:
             alert("Hệ thống đang đăng xuất... Hẹn gặp lại!");
             break;
     
         default:
-            alert("Lựa chọn không hợp lệ, vui lòng thử lại!");
+            alert("Lựa chọn không hợp lệ, vui lòng thử lại!")
             break;
     }
 } while (choice!==5);
-
-
 
